@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1426">
+  <meta name="description" content="Кібермережа — навчальна інтерактивна візуалізація передавання пакетів у комп'ютерній мережі.">
+  <title>Кібермережа — інтерактивна модель мережі</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script defer src="js/script.js"></script>
+</head>
+<body>
+ <a class="skip-link" href="#simulator">До симулятора</a>
+ <header class="site-header" id="top">
+   <div class="container header-row">
+     <a href="#top" class="brand" aria-label="Кібермережа — головна"><span class="brand-icon" aria-hidden="true">◈</span> КІБЕР<span>МЕРЕЖА</span></a>
+     <nav aria-label="Основна навігація"><a href="#simulator">Симулятор</a><a href="#instructions">Як це працює</a><a href="#about">Про проєкт</a></nav>
+     <span class="header-mark"><span class="live-dot" aria-hidden="true"></span> Навчальна модель</span>
+   </div>
+ </header>
+ <main>
+  <section class="hero container" aria-labelledby="hero-title">
+   <div class="hero-kicker">NETWORK VISUALIZATION / SDLC LAB</div>
+   <h1 id="hero-title">Побач, як <span>рухаються дані</span><br>в комп'ютерній мережі</h1>
+   <p>Обирай пристрої, надсилай пакети та досліджуй, як змінюються маршрути й умовна затримка за різних станів мережі.</p>
+   <a class="hero-action" href="#simulator">Перейти до симулятора <span aria-hidden="true">↗</span></a>
+   <div class="hero-orb orb-a" aria-hidden="true"></div><div class="hero-orb orb-b" aria-hidden="true"></div>
+  </section>
+  <section class="workspace container" id="simulator" aria-labelledby="sim-title">
+   <div class="section-head"><div><span class="eyebrow">ІНТЕРАКТИВНА ЛАБОРАТОРІЯ</span><h2 id="sim-title">Мережа під контролем</h2></div><span class="version">Схема 01 / локальна топологія</span></div>
+   <div class="app-grid">
+    <div class="visual-column">
+     <div class="network-panel">
+      <div class="panel-top"><div class="panel-title"><span class="tiny-activity" aria-hidden="true"></span> Топологія мережі</div><div class="view-tags"><span>8 вузлів</span><span id="linkCount">8 з'єднань</span></div></div>
+      <div class="canvas-wrap">
+       <svg id="networkSvg" viewBox="0 0 920 540" role="img" aria-label="Інтерактивна топологія мережі з восьми вузлів; вузли можна обирати мишею або клавіатурою">
+        <defs>
+          <pattern id="dotGrid" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r="1" fill="#33465f" opacity=".52"/></pattern>
+          <filter id="glow"><feGaussianBlur stdDeviation="8" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0 0 L0 6 L8 3 z" fill="#29d0b2"/></marker>
+        </defs>
+        <rect width="920" height="540" fill="url(#dotGrid)" />
+        <g id="edgeLayer"></g><g id="routeLayer"></g><g id="nodeLayer"></g><g id="packetLayer"></g>
+       </svg>
+       <div class="canvas-overlay"><span class="status-label"><span class="dot" id="stateDot"></span><span id="stateName">Мережа працює</span></span><span class="canvas-help">Клікни на вузол, щоб переглянути інформацію</span></div>
+      </div>
+      <div class="network-footer"><div class="legend"><span><i class="legend-line"></i> З'єднання</span><span><i class="legend-line route"></i> Маршрут</span><span><i class="legend-line disabled"></i> Недоступне</span></div><span class="canvas-note">Схематична демонстрація · не реальний трафік</span></div>
+     </div>
+     <div class="bottom-panels">
+      <div class="stat-card"><span>Вузлів у мережі</span><strong id="metricNodes">08</strong><small>Навчальна топологія</small></div>
+      <div class="stat-card"><span>Активних з'єднань</span><strong id="metricLinks">08</strong><small id="linksCaption">Усі лінії доступні</small></div>
+      <div class="stat-card"><span>Затримка пакета</span><strong id="metricLatency">— <em>мс</em></strong><small>Умовна оцінка</small></div>
+     </div>
+    </div>
+    <aside class="controls" aria-label="Керування мережею">
+      <div class="control-top"><h3>Панель керування</h3><span class="control-pill">LIVE DEMO</span></div>
+      <div class="field-group"><label for="sourceSelect">Відправник</label><select id="sourceSelect"></select></div>
+      <div class="select-connector" aria-hidden="true"><span>↓</span> передавання пакета</div>
+      <div class="field-group"><label for="targetSelect">Одержувач</label><select id="targetSelect"></select></div>
+      <fieldset class="mode-group"><legend>Режим мережі</legend><div class="mode-options" role="group" aria-label="Режим мережі">
+       <label class="mode-option"><input name="mode" type="radio" value="normal" checked><span>Нормальний</span></label>
+       <label class="mode-option"><input name="mode" type="radio" value="overload"><span>Навантаження</span></label>
+       <label class="mode-option"><input name="mode" type="radio" value="fault"><span>Збій лінії</span></label>
+      </div></fieldset>
+      <div class="speed-head"><label for="speedSlider">Швидкість анімації</label><output id="speedValue" for="speedSlider">1.0×</output></div>
+      <input id="speedSlider" type="range" min="0.5" max="2" step="0.25" value="1" aria-label="Швидкість анімації">
+      <div class="actions"><button id="routeBtn" class="secondary-btn" type="button">Показати маршрут</button><button id="sendBtn" class="primary-btn" type="button">Надіслати пакет <span aria-hidden="true">↗</span></button></div>
+      <div class="sub-actions"><button id="pauseBtn" type="button" disabled>Пауза</button><button id="resetBtn" type="button">Скинути</button></div>
+      <p class="message" id="message" role="status" aria-live="polite">Оберіть два різні вузли та запустіть передавання.</p>
+      <div class="node-info"><div class="info-overline">ІНФОРМАЦІЯ ПРО ПРИСТРІЙ</div><div id="nodeDetails" aria-live="polite"><h4>Маршрутизатор</h4><p>Центральний вузол з'єднує сегменти навчальної мережі.</p><span class="device-tag">Router / R1</span></div></div>
+     </aside>
+   </div>
+   <div class="event-box"><div class="event-head"><h3>Журнал подій</h3><button id="clearLogBtn" type="button">Очистити журнал</button></div><ul id="eventLog" aria-live="polite"><li><time>00:00:00</time><span>Симулятор готовий до роботи.</span></li></ul></div>
+  </section>
+  <section id="instructions" class="instructions container"><div class="section-head"><div><span class="eyebrow">КОРОТКА ІНСТРУКЦІЯ</span><h2>Як працює симуляція</h2></div></div><div class="instruction-grid">
+   <article><span class="step-num">01</span><h3>Обери пристрої</h3><p>Вкажи відправника й одержувача в панелі. Натискання на вузол відкриває його опис.</p></article>
+   <article><span class="step-num">02</span><h3>Досліди маршрут</h3><p>Алгоритм пошуку в ширину знаходить шлях по доступних з'єднаннях. Лінія підсвічується.</p></article>
+   <article><span class="step-num">03</span><h3>Запусти пакет</h3><p>Спостерігай рух точки, змінюй швидкість, призупиняй та порівнюй три сценарії мережі.</p></article>
+  </div></section>
+  <section id="about" class="about"><div class="container about-inner"><div><span class="eyebrow">ПРО НАВЧАЛЬНИЙ ПРОЄКТ</span><h2>Мережа без складних налаштувань</h2></div><p>«Кібермережа» — односторінковий навчальний застосунок для наочного пояснення передавання даних. Час затримки є умовним розрахунком за вагами з'єднань, а не вимірюванням реальної мережі. Програма не надсилає мережеві пакети та не потребує сервера.</p></div></section>
+ </main>
+ <footer class="site-footer"><div class="container footer-inner"><span>© 2026 Кібермережа · навчальний прототип</span><span>HTML · CSS · JavaScript</span><a href="#top">Нагору ↑</a></div></footer>
+</body>
+</html>
